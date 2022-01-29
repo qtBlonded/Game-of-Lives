@@ -17,7 +17,14 @@ class Grid:
             self.grid.append([0] * self.cols_size)
     
     def next_step(self):
-        pass
+        temp = []
+        for _ in range(self.rows_size):
+            temp.append([0] * self.cols_size)
+        
+        for row in range(self.rows_size):
+            for col in range(self.cols_size):
+                temp[row][col] = self._cell_next_step(row, col)
+        self.grid = temp
     
     def insert(self, cell_data):
         color, row, col = cell_data
@@ -32,14 +39,23 @@ class Grid:
             print(" ".join([str(val) for val in row]))
         print("-" * (self.cols_size*2 - 1) + "\n")
 
-    def _valid_adj(row, col):
-        pass
+    def _valid_adj(self, row, col):
+        valid = []
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                if 0 <= row + i < self.rows_size and 0 <= col + j < self.cols_size and not (i == 0 and j == 0):
+                    valid.append((row + i, col + j))
+        return valid
 
-    def _alive_adj(row, col):
-        pass
-    
-    def _is_alive_next_step(row, col):
-        pass
+    def _alive_adj(self, row, col):
+        valid_adj = self._valid_adj(row, col)
+        return [(row, col) for row, col in valid_adj if self.grid[row][col] > 0]
+
+    def _cell_next_step(self, row, col):
+        alive_adj = self._alive_adj(row, col)
+        if self.grid[row][col] == 0:
+            return 1 if len(alive_adj) == 3 else 0
+        return 1 if len(alive_adj) == 2 or len(alive_adj) == 3 else 0
 
 
 if __name__ == "__main__":
