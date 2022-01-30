@@ -10,30 +10,54 @@ from Grid import Grid
 import sys
 
 # global variables
-col = 20  # 10 columns
-row = 10  # 20 rows
-s_width = 800  # window width
-s_height = 750  # window height
-play_width = 600  # play window width; 600/20 = 30 width per block
-play_height = 300  # play window height; 300/10 = 30 height per block
+col = 40
+row = 20
+
 block_size = 30  # size of block
+play_width = col * block_size  # play window width; 600/20 = 30 width per block
+play_height = row * block_size  # play window height; 300/10 = 30 height per block
+
+s_width = play_width + 200  # window width
+s_height = play_height + 200  # window height
 
 top_left_x = (s_width - play_width) // 2
 top_left_y = 50
 
-game_steps = 10
+game_steps = 50
 
 cells = [
     (1, 5, 5),
     (1, 5, 6),
     (1, 5, 7),
-    (1, 6, 5)
+    (1, 6, 5),
+    
+    (1, 4, 14),
+    (1, 5, 14),
+    (1, 6, 14),
+    (1, 5, 15)
+]
+
+glider_gun = [
+    (1, 5, 1), (1, 5, 2),  (1, 6, 1), (1, 6, 2),
+    (1, 2, 35), (1, 2, 36), (1, 3, 35), (1, 3, 35), 
+    (1, 5, 11), (1, 6, 11), (1, 7, 11),
+    (1, 4, 12), (1, 8, 12), 
+    (1, 3, 13), (1, 9, 13),
+    (1, 3, 14), (1, 9, 14),  
+    (1, 6, 15),
+    (1, 4, 16), (1, 8, 16), 
+    (1, 5, 17), (1, 6, 17), (1, 7, 17),
+    (1, 6, 18),
+    (1, 3, 21), (1, 4, 21), (1, 5, 21),
+    (1, 3, 22), (1, 4, 22), (1, 5, 22),
+    (1, 2, 23), (1, 6, 23),
+    (1, 1, 25), (1, 2, 25), (1, 6, 25), (1, 7, 25) 
 ]
 
 def main(window):
     erase_text(window)
     grid = Grid(rows=row, cols=col)
-    for cell in cells:
+    for cell in glider_gun:
         grid.insert(cell)
 
     for step in range(game_steps + 1):  # Account for initial state
@@ -42,9 +66,9 @@ def main(window):
         draw_text('Current step: ' + str(step), 35, (0, 0, 0), window)
         pygame.display.update()
         grid.next_step()
-        pygame.time.wait(500)
+        pygame.time.wait(100)
 
-    erase_text(window)
+    window.fill((255, 255, 255))
 
 def update_cells(surface, grid):
     live_color = (0, 0, 0)
@@ -73,8 +97,8 @@ def draw_grid(surface):
                              (top_left_x + j * block_size, top_left_y + play_height))
 
 def draw_cell(surface, row, col, cell_color):
-    cell_rect = pygame.Rect(top_left_x + row*block_size,
-                                 top_left_y + col*block_size, 30, 30)
+    cell_rect = pygame.Rect(top_left_x + col*block_size,
+                                 top_left_y + row*block_size, 30, 30)
     pygame.draw.rect(surface, cell_color, cell_rect)
 
 def draw_text(text, size, text_color, window):
