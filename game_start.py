@@ -6,8 +6,8 @@ Date: 01-29-22
 """
 
 import pygame
-from Grid import Grid
 import sys
+from data.components.Grid import Grid
 
 # global variables
 col = 40
