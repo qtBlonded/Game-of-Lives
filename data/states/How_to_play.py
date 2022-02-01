@@ -6,15 +6,15 @@ from ..components.Tools import States
 from ..components.Tools import MenuManager
 
 
-class Options(States, MenuManager):
+class How_to_play(States, MenuManager):
 
 
     def __init__(self):
         States.__init__(self)
         MenuManager.__init__(self)
         self.next = 'menu'
-        self.options = ['Music', 'Sound', 'Graphics', 'Controls', 'Main Menu']
-        self.next_list = ['options', 'options', 'options', 'options', 'menu']
+        self.options = ['Main Menu']
+        self.next_list = ['menu']
         self.pre_render_options()
         self.from_bottom = 200
         self.spacer = 75

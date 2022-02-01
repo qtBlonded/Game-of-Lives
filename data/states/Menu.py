@@ -2,8 +2,8 @@
 
 """
 import pygame as pg
-from .Tools import States
-from .Tools import MenuManager
+from ..components.Tools import States
+from ..components.Tools import MenuManager
 
 
 class Menu(States, MenuManager):
@@ -13,8 +13,8 @@ class Menu(States, MenuManager):
         States.__init__(self)
         MenuManager.__init__(self)
         self.next = 'game'
-        self.options = ['Play', 'Options', 'Quit']
-        self.next_list = ['game', 'options']
+        self.options = ['Play', 'How to Play', 'Options', 'Quit']
+        self.next_list = ['game', 'how_to_play', 'options']
         self.pre_render_options()
         self.from_bottom = 200
         self.spacer = 75

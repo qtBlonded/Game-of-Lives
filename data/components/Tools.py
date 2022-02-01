@@ -9,7 +9,9 @@ class Control:
     def __init__(self):
         self.done = False
         self.fps = 60
-        self.screen = pg.display.set_mode((600,600))
+        self.screen = pg.display.set_mode((1400,800))
+        pg.display.set_caption('Game of Lives')
+
         self.screen_rect = self.screen.get_rect()
         self.clock = pg.time.Clock()
         
@@ -42,6 +44,7 @@ class Control:
     def main_game_loop(self):
         while not self.done:
             delta_time = self.clock.tick(self.fps)/1000.0
+            print(delta_time)
             self.event_loop()
             self.update(delta_time)
             pg.display.update()
@@ -137,12 +140,9 @@ class MenuManager:
 
 class States(Control):
 
-
     def __init__(self):
         Control.__init__(self)
         self.done = False
         self.next = None
         self.quit = False
         self.previous = None
-
-        
