@@ -1,5 +1,8 @@
 """
+Game class that runs and maintains the view page of the game.
 
+Author: Quinn Bardwell
+Date: 02/01/22
 """
 import pygame as pg
 import sys
@@ -38,7 +41,6 @@ glider_gun = [
 
 class Game(States):
     
-    
     def __init__(self):
         States.__init__(self)
         self.next = 'menu'
@@ -51,15 +53,14 @@ class Game(States):
         self.s_width, self.s_height = display_rect.width, display_rect.height
         
         self.top_left_x = (self.s_width - self.play_width) // 2
-        self.top_left_y = 50
-        self.game_steps = 500
+        self.top_left_y = 50  # Grid start variable
+        self.game_steps = 50  # Total steps in a game
         self.cur_step = 0
-        self.delay = 0.100  #delay per step in s
-
+        self.delay = 0.100  # delay per step in s
 
     def cleanup(self):
         print('cleaning up Game state stuff')
-        self.cur_step = 0
+        self.cur_step = 0  # Reset steps for repeated games
 
     def startup(self):
         print('starting Game state stuff')
@@ -70,8 +71,6 @@ class Game(States):
                 self.grid.insert(cell)
         self.time = 0
 
-
-
     def get_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.KEYDOWN:
             self.done = True
@@ -81,11 +80,8 @@ class Game(States):
             self.done = True
         if self.time >= self.cur_step * self.delay:
             self.update_cells(screen)
-            #erase_text(window)     
-            #draw_text('Current step: ' + str(step), 35, (0, 0, 0), window)
             pg.display.update()
             self.grid.next_step()
-            #pygame.time.wait(100)
             self.cur_step += 1
         self.time += dt
         debug(str(self.cur_step) + "  " + str(self.time))
@@ -122,27 +118,3 @@ class Game(States):
         cell_rect = pg.Rect(self.top_left_x + col*self.block_size,
                                     self.top_left_y + row*self.block_size, 30, 30)
         pg.draw.rect(screen, cell_color, cell_rect)
-"""
-def draw_text(text, size, text_color, window):
-    pygame.font.init()
-    font = pygame.font.SysFont("Arial", size)
-    window.blit(font.render(text, False, text_color), (0, 0))
-
-def erase_text(window):
-    pygame.draw.rect(window, (255, 255, 255), 
-                     pygame.Rect(0, 0, s_width, 50))
-    pygame.display.update()
-
-def main_menu(window):
-    run = True
-    while run:
-        draw_text('Press any key to begin', 35, (0, 0, 0), window)
-        pygame.display.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-            elif event.type == pygame.KEYDOWN:
-                main(window)
-    pygame.quit()
-"""
