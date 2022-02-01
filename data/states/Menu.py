@@ -35,7 +35,7 @@ class Menu(States, MenuManager):
         self.draw(screen)
 
     def draw(self, screen):
-        screen.fill((255,0,0))
+        screen.fill((0,0,0))
         self.draw_menu(screen)
 
         

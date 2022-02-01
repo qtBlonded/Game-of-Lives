@@ -39,6 +39,29 @@ glider_gun = [
     (1, 1, 25), (1, 2, 25), (1, 6, 25), (1, 7, 25) 
 ]
 
+colored_glider_gun = [
+    (2, 5, 1), (2, 5, 2),  (2, 6, 1), (2, 6, 2),
+    (2, 2, 35), (2, 2, 36), (2, 3, 35), (2, 3, 35), 
+    (3, 5, 11), (3, 6, 11), (3, 7, 11),
+    (3, 4, 12), (3, 8, 12), 
+    (3, 3, 13), (3, 9, 13),
+    (3, 3, 14), (3, 9, 14),  
+    (3, 6, 15),
+    (3, 4, 16), (3, 8, 16), 
+    (3, 5, 17), (3, 6, 17), (3, 7, 17),
+    (3, 6, 18),
+    (3, 3, 21), (3, 4, 21), (3, 5, 21),
+    (3, 3, 22), (3, 4, 22), (3, 5, 22),
+    (3, 2, 23), (3, 6, 23),
+    (3, 1, 25), (3, 2, 25), (3, 6, 25), (3, 7, 25) 
+]
+
+player_colors = {
+    1: (0, 0, 0),
+    2: (128, 0, 0),
+    3: (0, 0, 128),
+    4: (0, 128, 0)
+}
 class Game(States):
     
     def __init__(self):
@@ -67,7 +90,7 @@ class Game(States):
         pg.display.get_surface().fill((255, 255, 255))
         pg.display.update()
         self.grid = Grid(rows=self.row, cols=self.col)
-        for cell in glider_gun:
+        for cell in colored_glider_gun:
                 self.grid.insert(cell)
         self.time = 0
 
@@ -90,12 +113,12 @@ class Game(States):
         screen.fill((0,0,255))
 
     def update_cells(self, screen):
-        live_color = (0, 0, 0)
+        #live_color = (0, 0, 0)
         dead_color = (255, 255, 255)
         for row in range(len(self.grid.grid)):  # Swap col and row because of pygame
             for col in range(len(self.grid.grid[0])):
                 if self.grid.grid[row][col] > 0:
-                    self.draw_cell(screen, row, col, live_color)
+                    self.draw_cell(screen, row, col, player_colors[self.grid.grid[row][col]])
                 else:
                     self.draw_cell(screen, row, col, dead_color)
         self.draw_grid(screen)

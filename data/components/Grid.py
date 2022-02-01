@@ -8,9 +8,10 @@ Date: 01-29-22
 class Grid:
 
 
-    def __init__(self, rows=10, cols=10):
+    def __init__(self, rows=10, cols=10, players=2):
         self.rows_size = rows
         self.cols_size = cols
+        self.players = players
 
         self.grid = []
         for _ in range(self.rows_size):
@@ -20,7 +21,7 @@ class Grid:
         temp = []
         for _ in range(self.rows_size):
             temp.append([0] * self.cols_size)
-        
+
         for row in range(self.rows_size):
             for col in range(self.cols_size):
                 temp[row][col] = self._cell_next_step(row, col)
@@ -28,11 +29,8 @@ class Grid:
     
     def insert(self, cell_data):
         color, row, col = cell_data
-        assert 0 <= row < self.rows_size
-        assert 0 <= col < self.cols_size
-
         self.grid[row][col] = color
-    
+
     def grid_print(self):
         print("-" * (self.cols_size*2 - 1))
         for row in self.grid:
@@ -53,9 +51,14 @@ class Grid:
 
     def _cell_next_step(self, row, col):
         alive_adj = self._alive_adj(row, col)
+        colors = [self.grid[r][c] for r, c in alive_adj if self.grid[r][c] > 0]
+        # 1 is neutral, > 2 is player
+        freq = [(colors.count(player_id), player_id) for player_id in range(1, self.players + 2)]
+        freq.sort()
+        color = 1 if freq[-1][0] == freq[-2][0] else freq[-1][1]
         if self.grid[row][col] == 0:
-            return 1 if len(alive_adj) == 3 else 0
-        return 1 if len(alive_adj) == 2 or len(alive_adj) == 3 else 0
+            return color if len(alive_adj) == 3 else 0
+        return color if len(alive_adj) == 2 or len(alive_adj) == 3 else 0
 
 
 if __name__ == "__main__":
@@ -64,11 +67,19 @@ if __name__ == "__main__":
 
     cells = [
         (1, 5, 5),
-        (1, 5, 6),
-        (1, 5, 7),
-        (1, 6, 5)
+        (2, 5, 6),
+        (2, 5, 7),
+        (2, 6, 5)
     ]
     for cell in cells:
         grid.insert(cell)
 
-    grid.grid_print()    
+    grid.grid_print()
+    grid.next_step()
+    grid.grid_print()
+    grid.next_step()
+    grid.grid_print()
+    grid.next_step()
+    grid.grid_print()
+    grid.next_step()
+    grid.grid_print()

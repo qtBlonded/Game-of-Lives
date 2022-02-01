@@ -92,6 +92,7 @@ class MenuManager:
             if opt[1].collidepoint(pg.mouse.get_pos()):
                 if self.last_option != opt:
                     self.last_option = opt
+
     def mouse_menu_click(self, event):
         '''select menu option '''
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
@@ -100,6 +101,7 @@ class MenuManager:
                     self.selected_index = i
                     self.select_option(i)
                     break
+
     def pre_render_options(self):
         '''setup render menu options based on selected or deselected'''
         font_deselect = pg.font.SysFont("arial", 50)

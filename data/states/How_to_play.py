@@ -16,7 +16,7 @@ class How_to_play(States, MenuManager):
         self.options = ['Main Menu']
         self.next_list = ['menu']
         self.pre_render_options()
-        self.from_bottom = 200
+        self.from_bottom = 450
         self.spacer = 75
 
     def cleanup(self):
@@ -35,7 +35,7 @@ class How_to_play(States, MenuManager):
         self.draw(screen)
 
     def draw(self, screen):
-        screen.fill((255,0,0))
+        screen.fill((0,0,0))
         self.draw_menu(screen)
 
         
