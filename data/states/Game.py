@@ -78,36 +78,57 @@ class Game(States):
         self.top_left_x = (self.s_width - self.play_width) // 2
         self.top_left_y = 50  # Grid start variable
         self.game_steps = 50  # Total steps in a game
-        self.cur_step = 0
+        self.game_steps_per_move = 1
         self.delay = 0.100  # delay per step in s
+        self.player_count = 2
 
     def cleanup(self):
         print('cleaning up Game state stuff')
-        self.cur_step = 0  # Reset steps for repeated games
 
     def startup(self):
         print('starting Game state stuff')
         pg.display.get_surface().fill((255, 255, 255))
         pg.display.update()
-        self.grid = Grid(rows=self.row, cols=self.col)
+        self.grid = Grid(rows=self.row, cols=self.col, players=self.player_count)
         for cell in colored_glider_gun:
                 self.grid.insert(cell)
         self.time = 0
+        self.cur_step = 0
+        self.player_turn = 1
+        self.move_count = 0
 
     def get_event(self, event):
-        if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.KEYDOWN:
+        if event.type == pg.KEYDOWN:
             self.done = True
+        if event.type == pg.MOUSEBUTTONDOWN:
+            mouse_pos = pg.mouse.get_pos()
+            col = (mouse_pos[0] - self.top_left_x)//self.block_size
+            row = (mouse_pos[1] - self.top_left_y)//self.block_size
+            if 0 <= row < self.row and 0 <= col < self.col:
+                self.move_count += 1
+                cell_data = (self.player_turn, row, col)
+                self.grid.insert(cell_data)
+            debug("row: " + str(row) + "--" + "col: " + str(col), y=35)
 
     def update(self, screen, dt):
+        # Do not do anything until we return to menu
         if self.cur_step == self.game_steps:
-            self.done = True
-        if self.time >= self.cur_step * self.delay:
+            return
+        # Initial grid drawing
+        if self.move_count == 0:
             self.update_cells(screen)
-            pg.display.update()
-            self.grid.next_step()
-            self.cur_step += 1
-        self.time += dt
-        debug(str(self.cur_step) + "  " + str(self.time))
+            pg.display.update()        
+        # Increment game
+        if (self.move_count) * self.game_steps_per_move > self.cur_step:
+            self.time += dt
+            if self.time >= self.cur_step * self.delay:
+                self.grid.next_step()
+                self.update_cells(screen)
+                pg.display.update()
+                self.cur_step += 1
+        self.player_turn = (self.move_count % self.player_count) + 2
+        
+        debug(str(self.cur_step) + "--" + str(round(self.time, 2)) + "--" + str(self.move_count))
 
     def draw(self, screen):
         screen.fill((0,0,255))
